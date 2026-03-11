@@ -1,6 +1,7 @@
 import curses
 from curses import wrapper
 import webbrowser
+import requests
 
 
 def main(stdscr):
@@ -22,9 +23,14 @@ def main(stdscr):
     curses.init_pair(1, - 1, -1)
     curses.init_pair(2, curses.COLOR_GREEN, -1)
 
+    repo_count = requests.get(
+        "https://api.github.com/users/eesazahed").json()["public_repos"]
+
     menu = [
-        ("GitHub", "https://github.com/eesazahed"),
-        ("LinkedIn", "https://www.linkedin.com/in/eszhd"),
+        ("personal site", "https://eesa.zahed.ca"),
+        (f"github ({repo_count} public repos)",
+         "https://github.com/eesazahed?tab=repositories"),
+        ("linkedin", "https://www.linkedin.com/in/eszhd"),
     ]
 
     selected = 0
@@ -34,13 +40,13 @@ def main(stdscr):
 
         stdscr.addstr(1, 2, "Press 'q' to exit")
 
-        add_line_of_text(10, "hi my name is eesa", 2)
+        add_line_of_text(8, "hi my name is eesa", 2)
         add_line_of_text(
-            12, "i am a high school senior and i like software development")
+            10, "i am a high school senior and i like software development")
 
         height, width = stdscr.getmaxyx()
 
-        start_y = 14
+        start_y = 12
         for index, item in enumerate(menu):
             url_title = item[0]
 
