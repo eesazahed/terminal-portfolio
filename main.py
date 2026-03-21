@@ -54,6 +54,20 @@ def main(stdscr):
         stdscr.addstr(padding_y + border_height - 1,
                       padding_x, border_char*border_len)
 
+    def loading_screen(width_bar=20, delay=0.05):
+        height, width = stdscr.getmaxyx()
+        start_x = (width - (width_bar + 2)) // 2
+        start_y = height // 2
+
+        for i in range(width_bar + 1):
+            stdscr.clear()
+            bar = "[" + "#" * i + " " * (width_bar - i) + "]"
+            stdscr.addstr(start_y - 2, start_x,
+                          "Loading...")
+            stdscr.addstr(start_y, start_x, bar)
+            stdscr.refresh()
+            time.sleep(delay)
+
     stdscr.clear()
     stdscr.nodelay(True)
     stdscr.keypad(True)
@@ -61,9 +75,10 @@ def main(stdscr):
     curses.start_color()
     curses.use_default_colors()
     curses.curs_set(0)
-
     curses.init_pair(1, -1, -1)
     curses.init_pair(2, curses.COLOR_GREEN, -1)
+
+    loading_screen()
 
     menu = [
         ("send me an email", "mailto:eszhd1@gmail.com"),
