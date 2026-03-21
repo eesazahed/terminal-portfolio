@@ -1,7 +1,6 @@
 import curses
 from curses import wrapper
 import webbrowser
-import requests
 import time
 import textwrap
 
@@ -41,18 +40,19 @@ def main(stdscr):
         height, width = stdscr.getmaxyx()
 
         border_char = "#"
-        padding = 3
-        border_len = width - padding*2
-        border_height = height - padding*2
+        padding_x = 2
+        padding_y = 1
+        border_len = width - padding_x*2
+        border_height = height - padding_y*2
 
-        stdscr.addstr(padding, padding, border_char*border_len)
+        stdscr.addstr(padding_y, padding_x, border_char*border_len)
         stdscr.addstr(10, 10, str(width))
         for y in range(border_height - 2):
             blank_space = " " * (border_len - 2)
-            stdscr.addstr(y + padding + 1, padding,
+            stdscr.addstr(y + padding_y + 1, padding_x,
                           f"{border_char}{blank_space}{border_char}")
-        stdscr.addstr(padding + border_height - 1,
-                      padding, border_char*border_len)
+        stdscr.addstr(padding_y + border_height - 1,
+                      padding_x, border_char*border_len)
 
     stdscr.clear()
     stdscr.nodelay(True)
@@ -65,16 +65,10 @@ def main(stdscr):
     curses.init_pair(1, -1, -1)
     curses.init_pair(2, curses.COLOR_GREEN, -1)
 
-    try:
-        repo_count = requests.get(
-            "https://api.github.com/users/eesazahed").json().get("public_repos", 0)
-    except Exception:
-        repo_count = 0
-
     menu = [
+        ("send me an email", "mailto:eszhd1@gmail.com"),
         ("personal site", "https://eesa.zahed.ca"),
-        (f"github ({repo_count} public repos)",
-         "https://github.com/eesazahed?tab=repositories"),
+        ("github repos", "https://github.com/eesazahed?tab=repositories"),
         ("linkedin", "https://www.linkedin.com/in/eszhd"),
     ]
 
@@ -93,15 +87,15 @@ def main(stdscr):
         safe_addstr(4, center_x, display_text[:width], curses.color_pair(2))
         marquee_pos = (marquee_pos + 1) % len(marquee_text)
 
-        safe_addstr(1, 2, "Press 'q' to exit")
-
-        main_padding = 16
+        safe_addstr(1, 5, " (Press 'q' to exit) ")
 
         y = 8
         block_lines = [
             "hi my name is eesa",
             "i am a high school senior and i like software development.",
-            "i have been coding for quite a while now i guess."
+            "i have been coding for quite a while now i guess.",
+            "my hobbies/interests include coding (ofc), aot,",
+            "atla, skateboarding, minecraft, etc."
         ]
         y += add_text_block(y, block_lines)
 
