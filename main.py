@@ -37,6 +37,23 @@ def main(stdscr):
 
         return total_lines
 
+    def render_border():
+        height, width = stdscr.getmaxyx()
+
+        border_char = "#"
+        padding = 3
+        border_len = width - padding*2
+        border_height = height - padding*2
+
+        stdscr.addstr(padding, padding, border_char*border_len)
+        stdscr.addstr(10, 10, str(width))
+        for y in range(border_height - 2):
+            blank_space = " " * (border_len - 2)
+            stdscr.addstr(y + padding + 1, padding,
+                          f"{border_char}{blank_space}{border_char}")
+        stdscr.addstr(padding + border_height - 1,
+                      padding, border_char*border_len)
+
     stdscr.clear()
     stdscr.nodelay(True)
     stdscr.keypad(True)
@@ -68,6 +85,8 @@ def main(stdscr):
     while True:
         stdscr.clear()
         height, width = stdscr.getmaxyx()
+
+        render_border()
 
         display_text = marquee_text[marquee_pos:] + marquee_text[:marquee_pos]
         center_x = max(0, width // 2 - len(display_text) // 2)
